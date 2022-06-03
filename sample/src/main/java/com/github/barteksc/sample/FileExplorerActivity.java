@@ -45,10 +45,10 @@ import com.shockwave.pdfium.PdfDocument;
 
 import java.util.List;
 
-public class PDFViewActivity extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener,
+public class FileExplorerActivity extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener,
         OnPageErrorListener {
 
-    private static final String TAG = PDFViewActivity.class.getSimpleName();
+    private static final String TAG = FileExplorerActivity.class.getSimpleName();
 
     private final static int REQUEST_CODE = 42;
     public static final int PERMISSION_CODE = 42042;
@@ -97,15 +97,10 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
     }
 
     void pickFile() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                READ_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{READ_EXTERNAL_STORAGE},
-                    PERMISSION_CODE
-            );
+            ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_CODE);
 
             return;
         }
@@ -126,11 +121,7 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
 
     void afterViews() {
         pdfView.setBackgroundColor(Color.LTGRAY);
-        if (uri != null) {
-            displayFromUri(uri);
-        } else {
-            displayFromAsset(SAMPLE_FILE);
-        }
+        onResult(RESULT_OK, getIntent());
         setTitle(pdfFileName);
     }
 
@@ -251,11 +242,9 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
      * @param grantResults Whether permissions granted
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_CODE) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 launchPicker();
             }
         }
